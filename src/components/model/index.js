@@ -26,7 +26,7 @@ const TaskModal = (props) => {
 
   const { taskModal, taskToggle, onUpdateTask, taskRec, onAddTask } = props;
 
-
+  console.log(new Date().toISOString(), new Date().toISOString().substr(0,10));
   return (
     <Modal isOpen={taskModal} fade={false} toggle={taskToggle} centered={true} size="lg">
       <ModalHeader toggle={taskToggle}>
@@ -34,14 +34,17 @@ const TaskModal = (props) => {
       </ModalHeader>
       <ModalBody>
         <Formik
-          initialValues={initialValues}
+          initialValues={{
+            task: taskRec.status === 'addTask' ? '' : taskRec.task,
+            taskExpDate: taskRec.status === 'addTask' ? '' : taskRec.taskExpDate,
+          }}
           onSubmit={(values, { resetForm }) => {
             if (taskRec.status === 'addTask') {
               onAddTask(values);
             } else {
               onUpdateTask({ ...values, id: taskRec._id });
             }
-            taskToggle();
+            taskToggle(null);
           }}
         >
 
@@ -66,7 +69,6 @@ const TaskModal = (props) => {
                       name="task"
                       type="text"
                       className="form-control"
-                      onBlur={handleBlur}
                       onChange={handleChange}
                       defaultValue={taskRec.task}
                     />
@@ -82,9 +84,12 @@ const TaskModal = (props) => {
                       name="taskExpDate"
                       type="date"
                       className="form-control"
-                      onBlur={handleBlur}
                       onChange={handleChange}
-                      defaultValue={taskRec.taskExpDate}
+                      defaultValue={
+                        taskRec.taskExpDate
+                          ? new Date(taskRec.taskExpDate).toISOString().substr(0,10)
+                          : ''
+                      }
                     />
                   </FormGroup>
                 </Col>
@@ -93,12 +98,10 @@ const TaskModal = (props) => {
                 type="submit"
                 color="primary"
                 className="mr-1 px-4 waves-effect waves-light"
-
               >
-
                 Submit
               </Button>
-              <Button color="secondary" onClick={() => taskToggle}>
+              <Button color="secondary" onClick={() => taskToggle(null)}>
                 Cancel
               </Button>
             </Form>

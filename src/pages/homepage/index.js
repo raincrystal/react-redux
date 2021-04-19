@@ -43,7 +43,7 @@ const HomePage = (props) => {
           <Table todoList={taskList} taskToggle={taskToggle} deleteTask={deleteTask} handleUpdateStatus={handleUpdateStatus} />
         </div>
       </div>
-      <TaskModel taskToggle={taskToggle} taskModal={taskModal} taskRec={taskRec} />
+      {taskRec && <TaskModel taskToggle={taskToggle} taskModal={taskModal} taskRec={taskRec} />}
     </Fragment>
   );
 };
